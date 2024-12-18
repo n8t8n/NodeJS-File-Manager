@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create File</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --ios-background: #f2f2f7;
+            --ios-elevated-background: #ffffff;
+            --ios-border-color: #e5e5ea;
+            --ios-text-primary: #000000;
+            --ios-accent-blue: #007aff;
+            --ios-border-radius: 12px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--ios-background);
+            color: var(--ios-text-primary);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: var(--ios-elevated-background);
+            border-radius: var(--ios-border-radius);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background-color: var(--ios-accent-blue);
+            border-color: var(--ios-accent-blue);
+            border-radius: var(--ios-border-radius);
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .ios-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--ios-text-primary);
+        }
+
+        .ios-back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--ios-accent-blue);
+            text-decoration: none !important;
+            font-weight: 500;
+            scale: 1;
+            transition: scale .2s ease;
+        }
+
+        .ios-back-link:hover {
+            text-decoration: underline;
+            scale:1.02;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="/?dir=<%= encodeURIComponent(currentDir) %>" class="ios-back-link">&larr; Back</a>
+        <div class="ios-title">Create File in <strong><%= currentDir %></strong></div>
+        <form action="/save-file" method="POST">
+            <div class="mb-3">
+                <label for="fileName" class="form-label">File Name (with extension)</label>
+                <input type="text" name="fileName" class="form-control" id="fileName" placeholder="Enter file name (e.g., document.txt)" required>
+            </div>
+            <input type="hidden" name="dir" value="<%= currentDir %>">
+            <button type="submit" class="btn rounded-4 btn-primary btn-lg w-100">Create File</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Move File</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --ios-background: #f2f2f7;
+            --ios-elevated-background: #ffffff;
+            --ios-border-color: #e5e5ea;
+            --ios-text-primary: #000000;
+            --ios-accent-blue: #007aff;
+            --ios-border-radius: 12px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--ios-background);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0px auto;
+            padding: 10px;
+            background-color: var(--ios-elevated-background);
+            border-radius: var(--ios-border-radius);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--ios-text-primary);
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            color: var(--ios-text-primary);
+            font-weight: 500;
+        }
+
+        .form-select {
+            border-radius: var(--ios-border-radius);
+            border: 1px solid var(--ios-border-color);
+        }
+
+        .btn-primary {
+            background-color: var(--ios-accent-blue);
+            border-color: var(--ios-accent-blue);
+            border-radius: var(--ios-border-radius);
+            font-weight: 600;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .btn-secondary {
+            border-radius: var(--ios-border-radius);
+            font-weight: 600;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .ios-back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--ios-accent-blue);
+            text-decoration: none !important;
+            font-weight: 500;
+            scale: 1;
+            font-size: 18px;
+            transition: scale .2s ease;
+        }
+
+        .ios-back-link:hover {
+            text-decoration: underline;
+            scale: 1.02;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="mb-3">
+            <a href="javascript:history.back()" class="ios-back-link">← Back</a>
+        </div>
+        <h1>Move File: <strong>
+                <%= file %>
+            </strong></h1>
+        <form action="/move-file" method="POST">
+            <input type="hidden" name="file" value="<%= file %>">
+            <input type="hidden" name="currentDir" value="<%= currentDir %>">
+
+            <div class="mb-3">
+                <label for="destinationDir" class="form-label">Select Destination Folder</label>
+                <select name="destinationDir" class="form-select form-select-lg" id="destinationDir" required>
+                    <% if (folders.length> 0) { %>
+                        <% folders.forEach(folder=> { %>
+                            <option value="<%= folder %>">
+                                <%= folder %>
+                            </option>
+                            <% }) %>
+                                <% } else { %>
+                                    <option value="">No folders available</option>
+                                    <% } %>
+                </select>
+            </div>
+
+            <button type="submit" class="btn rounded-4 btn-lg btn-primary">Move File</button>
+        </form>
+    </div>
+</body>
+
+</html>

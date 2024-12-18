@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>N8T8N - File Manager</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --ios-background: #f2f2f7;
+            --ios-elevated-background: #ffffff;
+            --ios-border-color: #e5e5ea;
+            --ios-text-primary: #000000;
+            --ios-text-secondary: #8e8e93;
+            --ios-accent-blue: #007aff;
+            --ios-accent-gray: #8e8e93;
+            --ios-border-radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--ios-background);
+            color: var(--ios-text-primary);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+
+
+        .ios-container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 10px;
+            padding-top: 40px
+        }
+
+        .ios-card {
+            background-color: var(--ios-elevated-background);
+            border-radius: var(--ios-border-radius);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            /* overflow: hidden; */
+        }
+
+        .ios-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            /* background-color: var(--ios-elevated-background); */
+            border-bottom: 1px solid var(--ios-border-color);
+        }
+
+        .ios-card-title {
+            font-weight: 600;
+            font-size: 17px;
+            color: var(--ios-text-primary);
+        }
+
+        .ios-file-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ios-file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--ios-border-color);
+        }
+
+        .ios-file-item:last-child {
+            border-bottom: none;
+        }
+
+        .ios-server-status {
+            text-align: center;
+            font-size: small;
+            margin-top: 10px;
+        }
+
+        .ios-file-details {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            width: 100px;
+
+        }
+
+        .ios-file-details div {
+            width: 100%;
+        }
+
+        .ios-file-icon {
+            margin-right: 15px;
+            color: var(--ios-accent-blue);
+            font-size: 24px;
+        }
+
+        .ios-file-name {
+            font-weight: 500;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            color: var(--ios-accent-blue);
+        }
+
+        .ios-file-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .ios-file-action {
+            color: var(--ios-accent-blue);
+            margin-left: 15px;
+            text-decoration: none;
+        }
+
+        .ios-upload-section {
+            padding: 20px;
+        }
+
+        .ios-file-input {
+            border: 2px dashed var(--ios-border-color);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            width: 100%
+        }
+
+
+        .ios-back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--ios-accent-blue);
+            text-decoration: none !important;
+            font-weight: 500;
+            scale: 1;
+            font-size: 18px;
+            transition: scale .2s ease;
+        }
+
+        .ios-back-link:hover {
+            text-decoration: underline;
+            scale: 1.02;
+        }
+
+
+        .accordion,
+        .accordion-button:focus,
+        .accordion-button:not(:disabled):not(.collapsed):hover,
+        .accordion-button:not(:disabled):not(.collapsed) {
+            box-shadow: none;
+            background-color: transparent;
+            border: none;
+            color: currentColor;
+            --bs-accordion-border-width: none;
+            --bs-accordion-border-radius: none;
+            border-color: none !important;
+        }
+
+        .ios-file-input:hover {
+            border-color: var(--ios-accent-blue);
+            background-color: rgba(0, 122, 255, 0.05);
+        }
+
+        .ios-file-input input[type="file"] {
+            display: none;
+        }
+
+        .ios-button {
+            display: block;
+            width: 100%;
+            background-color: var(--ios-accent-blue);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .ios-button:hover {
+            background-color: #0056b3;
+        }
+
+        .ios-button-2 {
+            display: block;
+            width: 100%;
+            background-color: none;
+            color: currentColor;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .ios-button-2:hover {
+            background-color: #f0f0f02b;
+        }
+
+        .max-width {
+            max-width: 42px;
+        }
+
+        .dropdown-menu {
+            border-radius: var(--ios-border-radius);
+            box-shadow: 0 4px 6px rgba(225, 198, 198, 0.1);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .dropdown-item i {
+            margin-right: 10px;
+        }
+
+        .ios-back-div {
+            position: fixed;
+            z-index: 300;
+            top: 0;
+            left: 0;
+            margin-top: 0px;
+            border-radius: 0px;
+            background: white;
+            color: var(--ios-accent-blue);
+            width: 100%;
+            text-decoration: none;
+            padding: 10px 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ios-container mt-3">
+        <!-- Current Directory -->
+        <div class="ios-card">
+            <div class="ios-card-header">
+                <div class="ios-card-title">Current Directory</div>
+            </div>
+            <div class="p-3">
+                <p class="text-muted mb-0"><strong>
+                        <%= currentDir %>./
+                    </strong></p>
+            </div>
+        </div>
+
+        <!-- File List -->
+        <div class="ios-card">
+            <div class="ios-card-header">
+                <div class="ios-card-title">Contents</div>
+                <div class="dropdown">
+                    <button class="btn ios-file-action border-0 p-0" type="button" id="dropdownMenuButton"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-plus-lg fs-5"></i>
+                    </button>
+                    <ul class="border-0 shadow-sm dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li>
+                            <a class="dropdown-item" href="/create-folder?dir=<%= encodeURIComponent(currentDir) %>">
+                                <i class="bi bi-folder-plus"></i> Create Folder
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/create-file?dir=<%= encodeURIComponent(currentDir) %>">
+                                <i class="bi bi-file-plus"></i> Create File
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <ul class="ios-file-list">
+                <% fileList.forEach(file=> { %>
+                    <% if (file.type==='folder' ) { %>
+                        <li class="ios-file-item">
+                            <div class="ios-file-details">
+                                <i class="bi bi-folder ios-file-icon"></i>
+                                <a href="/?dir=<%= encodeURIComponent(file.path) %> "
+                                    class="ios-file-name text-decoration-none">
+                                    <%= file.name %>
+                                </a>
+                            </div>
+                            <div class="ios-file-actions">
+                                <a href="/delete-folder?dir=<%= encodeURIComponent(currentDir) %>&folder=<%= encodeURIComponent(file.name) %> "
+                                    class="ios-file-action">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                                <a type="button" class="ios-file-action" data-bs-toggle="modal"
+                                    data-bs-target="#renameFolderModal" data-folder-name="<%= file.name %> "
+                                    data-folder-path="<%= file.path %> ">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            </div>
+                        </li>
+                        <% } else { %>
+                            <li class="ios-file-item">
+                                <div class="ios-file-details">
+                                    <i class="bi bi-file-earmark ios-file-icon"></i>
+                                    <% const editableExtensions=[ ".txt" , ".js" , ".css" , ".html" , ".json" , ".yml"
+                                        , ".env" , ".php" , ".go" , ".ejs" , ".vue" , ".scss" , ".sass" , ".less"
+                                        , ".ts" , ".jsx" , ".tsx" , ]; %>
+                                        <% if (editableExtensions.includes(path.extname(file.path).toLowerCase())) { %>
+                                            <a href="/edit?file=<%= encodeURIComponent(file.path) %> "
+                                                class="ios-file-name text-decoration-none">
+                                                <%= file.name %>
+                                            </a>
+                                            <% } else { %>
+                                                <a href="/download/<%= encodeURIComponent(file.name) %>?path=<%= encodeURIComponent(file.path) %>"
+                                                    class="ios-file-name text-decoration-none"
+                                                    download="<%= file.name %>">
+                                                    <%= file.name %>
+                                                </a>
+                                                <% } %>
+                                </div>
+                                <div class="ios-file-actions">
+                                    <a href="/move-file?file=<%= encodeURIComponent(file.path) %>&currentDir=<%= encodeURIComponent(currentDir) %> "
+                                        class="ios-file-action me-2">
+                                        <i class="bi bi-arrow-right-circle"></i>
+                                    </a>
+                                    <a href="/delete-file?file=<%= encodeURIComponent(file.path) %> "
+                                        class="ios-file-action">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                    <a type="button" class="ios-file-action" data-bs-toggle="modal"
+                                        data-bs-target="#renameModal" data-file-name="<%= file.name %> "
+                                        data-file-path="<%= file.path %> ">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                </div>
+                            </li>
+                            <% } %>
+                                <% }); %>
+            </ul>
+        </div>
+
+        <!-- Rename Modal -->
+        <div class="modal fade" id="renameModal" tabindex="-1" aria-labelledby="renameModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="renameModalLabel">Rename File</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/rename-file" method="post" id="renameForm">
+                            <input type="hidden" name="filePath" id="filePath">
+                            <div class="mb-3">
+                                <label for="newFileName" class="form-label">New File Name:</label>
+                                <input type="text" class="form-control form-control-lg" id="newFileName"
+                                    name="newFileName" required>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary rounded-4 btn-lg me-2">Rename</button>
+                                <button type="button" class="btn btn-secondary rounded-4 btn-lg"
+                                    data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rename modal script -->
+        <script>
+            const renameModal = document.getElementById('renameModal');
+            renameModal.addEventListener('show.bs.modal', event => {
+                const button = event.relatedTarget;
+                const filePath = button.getAttribute('data-file-path');
+                const fileName = button.getAttribute('data-file-name');
+                const modalBodyInput = renameModal.querySelector('.modal-body input[name="filePath"]');
+                const modalBodyInputName = renameModal.querySelector('.modal-body input[name="newFileName"]');
+                modalBodyInput.value = filePath.trim();
+                modalBodyInputName.value = fileName.trim();
+            });
+
+            // Trim whitespace before form submission
+            document.getElementById('renameForm').addEventListener('submit', function (event) {
+                const filePathInput = document.getElementById('filePath');
+                const newFileNameInput = document.getElementById('newFileName');
+                filePathInput.value = filePathInput.value.trim();
+                newFileNameInput.value = newFileNameInput.value.trim();
+            });
+        </script>
+
+
+        <!-- Rename Folder Modal -->
+        <div class="modal fade" id="renameFolderModal" tabindex="-1" aria-labelledby="renameFolderModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="renameFolderModalLabel">Rename Folder</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/rename-folder" method="post" id="renameFolderForm">
+                            <input type="hidden" name="folderPath" id="folderPath">
+                            <div class="mb-3">
+                                <label for="newFolderName" class="form-label">New Folder Name:</label>
+                                <input type="text" class="form-control" id="newFolderName" name="newFolderName"
+                                    required>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary me-2">Rename</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const renameFolderModal = document.getElementById('renameFolderModal');
+            renameFolderModal.addEventListener('show.bs.modal', event => {
+                const button = event.relatedTarget;
+                const folderPath = button.getAttribute('data-folder-path');
+                const folderName = button.getAttribute('data-folder-name');
+                const modalBodyInput = renameFolderModal.querySelector('.modal-body input[name="folderPath"]');
+                const modalBodyInputName = renameFolderModal.querySelector('.modal-body input[name="newFolderName"]');
+                modalBodyInput.value = folderPath.trim();
+                modalBodyInputName.value = folderName.trim();
+            });
+
+            // Trim whitespace before form submission
+            document.getElementById('renameFolderForm').addEventListener('submit', function (event) {
+                const folderPathInput = document.getElementById('folderPath');
+                const newFolderNameInput = document.getElementById('newFolderName');
+                folderPathInput.value = folderPathInput.value.trim();
+                newFolderNameInput.value = newFolderNameInput.value.trim();
+            });
+        </script>
+        <% if (backLink) { %>
+            <a href="/?dir=<%= encodeURIComponent(backLink) %>" class="ios-back-div ios-back-link">
+                ← Back
+            </a>
+            <% } %>
+
+                <!-- Server Management Section -->
+                <div class="ios-card">
+                    <div class="accordion" id="serverManagementAccordion">
+                        <div class="accordion-item border-0 rounded-4">
+                            <h2 class="accordion-header" id="serverManagementHeader">
+                                <button class="accordion-button collapsed rounded-4" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#serverManagementCollapse"
+                                    aria-expanded="false" aria-controls="serverManagementCollapse">
+                                    <strong>Start & Stop Servers
+                                        (PM2)</strong>
+                                </button>
+                            </h2>
+                            <div id="serverManagementCollapse" class="accordion-collapse collapse"
+                                aria-labelledby="serverManagementHeader" data-bs-parent="#serverManagementAccordion">
+                                <div class="accordion-body p-0">
+                                    <div class="ios-file-list">
+                                        <div class="ios-file-item">
+                                            <div class="ios-file-details">
+                                                <div>
+
+                                                    <div class="d-flex flex-wrap justify-content-between">
+                                                        <form action="/start-server" method="POST"
+                                                            class="input-group py-2 flex-grow-1">
+                                                            <input type="text" class="form-control" name="serverScript"
+                                                                id="serverScript" placeholder="builders/server.js"
+                                                                required>
+                                                            <button class="btn btn-primary" type="submit"><i
+                                                                    class="bi bi-play-fill"></i> Start</button>
+                                                        </form>
+                                                        <form action="/stop-server" method="POST"
+                                                            class="input-group py-2 flex-grow-1">
+                                                            <input type="text" class="form-control" name="serverName"
+                                                                id="serverName" placeholder="server-name" required>
+                                                            <button class="btn btn-danger" type="submit"><i
+                                                                    class="bi bi-stop-fill"></i> Stop</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ios-file-item">
+                                            <div class="ios-file-details">
+                                                <div>
+                                                    <button class="btn btn-lg rounded-4 btn-secondary w-100"
+                                                        onclick="window.location.href='/servers-running'">
+                                                        <strong>Running Servers (PM2)</strong>
+                                                    </button>
+                                                    <div class="ios-server-status">View all active PM2 servers</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- File Upload Section -->
+                <div class="ios-card">
+                    <div class="ios-card-header">
+                        <div class="ios-card-title">File Upload</div>
+                    </div>
+                    <div class="ios-upload-section">
+                        <form action="/upload" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="dir" value="<%= currentDir %>">
+                            <label class="ios-file-input">
+                                <input type="file" name="file" id="fileUpload" required>
+                                <div class="text-center" id="fileUploadLabel">
+                                    <i class="bi bi-cloud-upload fs-1"></i>
+                                    <p class="mb-1"><strong>Choose a file</strong></p>
+                                    <p class="text-muted" id="fileName">or drag and drop here</p>
+                                </div>
+                            </label>
+                            <button type="submit" class="ios-button btn-lg btn btn-primary rounded-4">Upload
+                                File</button>
+                        </form>
+                    </div>
+                </div>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+
+        const fileInput = document.getElementById('fileUpload');
+        const fileNameElement = document.getElementById('fileName');
+        const fileUploadLabel = document.getElementById('fileUploadLabel');
+
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                fileNameElement.textContent = file.name;
+            }
+        });
+
+        fileUploadLabel.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            fileUploadLabel.style.borderColor = '#007aff';
+        });
+
+        fileUploadLabel.addEventListener('dragleave', () => {
+            fileUploadLabel.style.borderColor = 'var(--ios-border-color)';
+        });
+
+        fileUploadLabel.addEventListener('drop', (event) => {
+            event.preventDefault();
+            const file = event.dataTransfer.files[0];
+            if (file) {
+                fileInput.files = event.dataTransfer.files;
+                fileNameElement.textContent = file.name;
+            }
+            fileUploadLabel.style.borderColor = 'var(--ios-border-color)';
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running Servers</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --ios-background: #f2f2f7;
+            --ios-elevated-background: #ffffff;
+            --ios-border-color: #e5e5ea;
+            --ios-text-primary: #000000;
+            --ios-text-secondary: #8e8e93;
+            --ios-accent-blue: #007aff;
+            --ios-accent-gray: #8e8e93;
+            --ios-border-radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--ios-background);
+            color: var(--ios-text-primary);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .server-item {
+            background-color: var(--ios-elevated-background);
+            border-radius: var(--ios-border-radius);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .server-item h5 {
+            margin: 0 0 10px;
+            font-weight: 600;
+            font-size: 17px;
+            color: var(--ios-text-primary);
+        }
+
+        .status {
+            font-size: 0.9rem;
+            color: var(--ios-text-secondary);
+        }
+
+        .accordion-button {
+            width: 100%;
+            text-align: left;
+            background-color: transparent;
+            border: none;
+            padding: 10px 0;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--ios-accent-blue);
+            cursor: pointer;
+        }
+
+        .accordion-button:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        .accordion-button::after {
+            float: right;
+            font-size: 1rem;
+            content: '\25B6';
+            /* Right arrow */
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-button.collapsed::after {
+            transform: rotate(90deg);
+        }
+
+        .logs-pre {
+            background-color: #f9f9fb;
+            padding: 15px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            max-height: 200px;
+            font-family: 'Menlo', monospace;
+            font-size: 0.85rem;
+            color: var(--ios-text-primary);
+        }
+
+        .path-details,
+        .logs-section {
+            padding: 10px 0;
+        }
+
+
+
+        .ios-back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--ios-accent-blue);
+            text-decoration: none !important;
+            font-weight: 500;
+            scale: 1;
+            font-size: 18px;
+            transition: scale .2s ease;
+        }
+
+        .ios-back-link:hover {
+            text-decoration: underline;
+            scale: 1.02;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-3">
+      <div class="mb-3">
+        <a href="/" class="ios-back-link">← Back</a>
+      </div>
+      <h2 class="mb-4">Running Servers</h2>
+  
+      <% if (runningServers.length===0) { %>
+        <p class="text-muted">No servers are currently running.</p>
+        <% } else { %>
+          <% runningServers.forEach((server, index)=> { %>
+            <div class="server-item p-4">
+              <h5>
+                <%= server.name %>
+              </h5>
+              <p class="status">Status: <strong>
+                  <%= server.status %>
+                </strong> | PID: <strong>
+                  <%= server.pid %>
+                </strong></p>
+  
+              <!-- PM2 View Accordion -->
+              <button class="accordion-button collapsed" data-bs-toggle="collapse"
+                data-bs-target="#pm2-view-<%= index %>">
+                PM2 View
+              </button>
+              <div id="pm2-view-<%= index %>" class="collapse pm2-view-section">
+                <pre>
+                  <code>
+                    <%= server.pm2View || 'No PM2 view available.' %>
+                  </code>
+                </pre>
+              </div>
+  
+              <!-- Path Accordion -->
+              <button class="accordion-button collapsed" data-bs-toggle="collapse"
+                data-bs-target="#path-<%= index %>">
+                Show Path
+              </button>
+              <div id="path-<%= index %>" class="collapse path-details">
+                <p><strong>Path:</strong>
+                  <%= server.path || 'No path available.' %>
+                </p>
+              </div>
+  
+              <!-- Logs Accordion -->
+              <button class="accordion-button collapsed" data-bs-toggle="collapse"
+                data-bs-target="#logs-<%= index %>">
+                View Logs
+              </button>
+              <div id="logs-<%= index %>" class="collapse logs-section">
+                <div class="logs-pre">
+                  <%= server.logs || 'No logs available.' %>
+                </div>
+              </div>
+  
+              <form action="/stop-server" method="POST" class="m-3">
+                <input type="hidden" name="index" value="<%= index %>">
+                <button type="submit" class="btn btn-danger">Stop Server</button>
+              </form>
+            </div>
+            <% }); %>
+          <% } %>
+    </div>
+  
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+
+</html>
