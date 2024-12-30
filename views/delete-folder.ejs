@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+
+          
+          <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -12,9 +14,12 @@
             --ios-elevated-background: #ffffff;
             --ios-border-color: #e5e5ea;
             --ios-text-primary: #000000;
+            --ios-border-radius: 12px;
             --ios-accent-red: #ff3b30;
             --ios-accent-gray: #8e8e93;
             --ios-border-radius: 12px;
+            --ios-accent-blue: #007aff;
+            
         }
 
         body {
@@ -44,18 +49,16 @@
             margin-bottom: 20px;
         }
 
-        .btn-danger {
-            background-color: var(--ios-accent-red);
-            border-color: var(--ios-accent-red);
-            border-radius: var(--ios-border-radius);
-            font-weight: 600;
-            width: 100%;
-        }
+        h1  span {
+                color:black;
+            }
 
-        .btn-danger:hover {
-            background-color: #d32f2f;
-            border-color: #d32f2f;
-        }
+        .btn-primary {
+            background-color: var(--ios-accent-blue);
+            border-radius: var(--ios-border-radius);
+            width: 100%;
+            font-weight: 600;
+         }
 
         .btn-secondary {
             background-color: var(--ios-accent-gray);
@@ -73,13 +76,15 @@
 
 <body>
     <div class="container">
-        <h1>Are you sure you want to delete the folder <%= folderName %>?</h1>
+        <h1>Are you sure you want to delete the folder <span><%= folderName %></span>?</h1>
         <form action="/delete-folder-confirm" method="POST">
             <input type="hidden" name="folderPath" value="<%= folderPath %>">
-            <button type="submit" class="btn btn-danger">Delete</button>
+            <button type="submit" class="btn btn-lg btn-primary">Delete</button>
         </form>
-        <a href="/" class="btn btn-secondary">Cancel</a>
+        <a href="/" class="btn btn-lg btn-secondary">Cancel</a>
     </div>
 </body>
 
 </html>
+        
+        
